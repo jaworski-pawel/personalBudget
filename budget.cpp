@@ -72,6 +72,40 @@ void Budget::addIncome()
     xml.Save("incomes.xml");
 }
 
+void Budget::addExpense()
+{
+    int expenseId, userId, date;
+    string item;
+    float amount;
+
+    system("cls");
+    cout << "Adding an expense" << endl;
+    cout << "Enter expense ID";
+    cin >> expenseId;
+    cout << "Enter the date: ";
+    cin >> date;
+    cout << "Enter the item: ";
+    cin >> item;
+    cout << "Enter the amount";
+    cin >> amount;
+
+    CMarkup xml;
+
+    createAFileIfItdoesNotExist("expenses.xml");
+    xml.Load("expenses.xml");
+    if(!xml.FindElem("expenses"))
+    {
+        xml.SetDoc( "<?xml version=\"1.0\" encoding=\"UTF\"?>\r\n" );
+        xml.AddElem( "expenses" );
+    }
+    xml.IntoElem();
+    xml.AddElem( "expenseId", expenseId);
+    xml.AddElem( "userId" , idOfTheLoggedUser );
+    xml.AddElem( "date" , date );
+    xml.AddElem( "amount", amount);
+    xml.Save("expenses.xml");
+}
+
 void Budget::createAFileIfItdoesNotExist(string fileName)
 {
     fstream file;
