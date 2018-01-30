@@ -85,19 +85,32 @@ void UsersBook::signUp(vector<User> &users)
 
 void UsersBook::changePassword(vector<User> &users, int idOfTheLoggedUser)
 {
-    string password;
+    string newPassword;
     cout << "Enter a new password: ";
-    cin >> password;
-    for (int i = 0; i < numberOfUsers; i++)
+    cin >> newPassword;
+
+    CMarkup xml;
+
+    createAFileIfItdoesNotExist("users.xml");
+    xml.Load("users.xml");
+
+    xml.FindElem();
+    xml.IntoElem();
+
+    while (xml.FindElem("user"))
     {
-        if (users[i].getUserId() == idOfTheLoggedUser)
+        xml.IntoElem();
+        xml.FindElem( "userId" );
+        if (idOfTheLoggedUser == convertStringToInt(xml.GetData()))
         {
-            users[i].setPassword(password);
-            User temporaryUser(users[i].getUserId(), users[i].getLogin(), users[i].getPassword(), users[i].getName(), users[i].getSurname());
-            addUserToFile(users, temporaryUser);
+            xml.FindElem( "password" );
+            xml.SetData( newPassword );
+            xml.Save("users.xml");
             cout << "Password changed." << endl;
             Sleep(1000);
+            break;
         }
+        xml.OutOfElem();
     }
 }
 
@@ -144,12 +157,10 @@ void UsersBook::createAFileIfItdoesNotExist(string fileName)
     if ( file.is_open() )
     {
         file.close();
-        cout << "File is exist";
     }
     else
     {
         file.close();
-        cout << "File is not exist" << endl;
         file.open(fileName.c_str(), ios::out);
         file.close();
     }
