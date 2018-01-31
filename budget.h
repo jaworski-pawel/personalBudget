@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <time.h>
 #include "income.h"
 #include "expense.h"
 #include "Markup.h"
@@ -31,6 +32,8 @@ public:
 private:
     void loadDataFromFile(vector<Income> &incomes, vector<Expense> &expenses, int idOfTheLoggedUser);
     void createAFileIfItdoesNotExist(string fileName);
+    int getCurrentTime();
+    int assignOperationId(string fileName);
 };
 
 #endif

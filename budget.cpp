@@ -1,4 +1,5 @@
 #include <iostream>
+#include <windows.h>
 #include "budget.h"
 
 using namespace std;
@@ -40,36 +41,61 @@ void Budget::setNumberOfExpenses(int numberOfExpenses)
 
 void Budget::addIncome()
 {
-    int incomeId, userId, date;
-    string item;
-    float amount;
+    char selection;
 
     system("cls");
-    cout << "Adding a income" << endl;
-    cout << "Enter incomeid";
-    cin >> incomeId;
-    cout << "Enter the date: ";
-    cin >> date;
-    cout << "Enter the item: ";
-    cin >> item;
-    cout << "Enter the amount";
-    cin >> amount;
+    cout << "Adding a income" << endl << endl;
+    cout << "1. Current date" << endl;
+    cout << "2. Another date" << endl << endl;
+    cin >> selection;
 
-    CMarkup xml;
-
-    createAFileIfItdoesNotExist("incomes.xml");
-    xml.Load("incomes.xml");
-    if(!xml.FindElem("incomes"))
+    switch (selection)
     {
-        xml.SetDoc( "<?xml version=\"1.0\" encoding=\"UTF\"?>\r\n" );
-        xml.AddElem( "incomes" );
+    case '1':
+    {
+        int incomeId, userId, date;
+        string item;
+        float amount;
+
+        incomeId = assignOperationId("incomes.xml");
+        userId = idOfTheLoggedUser;
+        date = getCurrentTime();
+        system("cls");
+        cout << "Adding a income with current date" << endl << endl;
+        cout << "Enter the item: ";
+        cin >> item;
+        cout << "Enter the amount: ";
+        cin >> amount;
+
+        CMarkup xml;
+
+        createAFileIfItdoesNotExist("incomes.xml");
+        xml.Load("incomes.xml");
+        if(!xml.FindElem("incomes"))
+        {
+            xml.SetDoc( "<?xml version=\"1.0\" encoding=\"UTF\"?>\r\n" );
+            xml.AddElem( "incomes" );
+        }
+        xml.IntoElem();
+        xml.AddElem( "income" );
+        xml.IntoElem();
+        xml.AddElem( "incomeId", incomeId );
+        xml.AddElem( "userId", userId );
+        xml.AddElem( "date", date );
+        xml.AddElem( "amount", amount);
+        xml.Save("incomes.xml");
+
+        cout << "Income added" << endl;
+        Sleep(1000);
+
+        break;
     }
-    xml.IntoElem();
-    xml.AddElem( "incomeId", incomeId);
-    xml.AddElem( "userId" , idOfTheLoggedUser );
-    xml.AddElem( "date" , date );
-    xml.AddElem( "amount", amount);
-    xml.Save("incomes.xml");
+    case '2':
+    {
+        //ustaw date
+        break;
+    }
+    }
 }
 
 void Budget::addExpense()
@@ -100,8 +126,8 @@ void Budget::addExpense()
     }
     xml.IntoElem();
     xml.AddElem( "expenseId", expenseId);
-    xml.AddElem( "userId" , idOfTheLoggedUser );
-    xml.AddElem( "date" , date );
+    xml.AddElem( "userId", idOfTheLoggedUser );
+    xml.AddElem( "date", date );
     xml.AddElem( "amount", amount);
     xml.Save("expenses.xml");
 }
@@ -123,4 +149,27 @@ void Budget::createAFileIfItdoesNotExist(string fileName)
         file.close();
     }
 
+}
+
+int Budget::getCurrentTime()
+{
+    time_t currentTime;
+    time(&currentTime);
+    return currentTime;
+}
+
+int Budget::assignOperationId(string fileName)
+{
+    int newId = 1;
+    CMarkup xml;
+
+    createAFileIfItdoesNotExist(fileName);
+    xml.Load(fileName);
+    xml.FindElem();
+    xml.IntoElem();
+    while ( xml.FindElem("income") )
+    {
+        newId++;
+    }
+    return newId;
 }

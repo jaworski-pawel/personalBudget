@@ -7,9 +7,20 @@ using namespace std;
 
 class Operation
 {
-    int idOfLoggedUser;
-public:
+    int userId;
+    int date;
+    string item;
+    float amount;
 
+public:
+    int getUserId();
+    void setUserId(int userId);
+    int getDate();
+    void setDate(int date);
+    string getItem();
+    void setItem(string item);
+    float getAmount();
+    void setAmount(float amount);
 };
 
 #endif
