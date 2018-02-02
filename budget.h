@@ -34,6 +34,11 @@ private:
     void createAFileIfItdoesNotExist(string fileName);
     int getCurrentTime();
     int assignOperationId(string fileName);
+    void addIncomeToFile(int date);
+    int convertStringToInt(string number);
+    bool checkData(string date);
+    int convertDateToInt(string date);
+    int getTheNumberOfDaysOfTheMonth(int year, int month);
 };
 
 #endif
