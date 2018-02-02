@@ -5,6 +5,7 @@
 #include <vector>
 #include <fstream>
 #include <time.h>
+#include <stdlib.h>
 #include "income.h"
 #include "expense.h"
 #include "Markup.h"
@@ -39,6 +40,7 @@ private:
     bool checkData(string date);
     int convertDateToInt(string date);
     int getTheNumberOfDaysOfTheMonth(int year, int month);
+    double convertStringToDouble(string number);
 };
 
 #endif

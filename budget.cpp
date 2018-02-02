@@ -150,8 +150,7 @@ int Budget::assignOperationId(string fileName)
 void Budget::addIncomeToFile(int date)
 {
     int incomeId, userId;
-    string item;
-    float amount;
+    string item, amount;
 
     incomeId = assignOperationId("incomes.xml");
     userId = idOfTheLoggedUser;
@@ -161,6 +160,10 @@ void Budget::addIncomeToFile(int date)
     cin >> item;
     cout << "Enter the amount: ";
     cin >> amount;
+    if (amount.find_first_of(',') != string::npos)
+    {
+        amount[amount.find_first_of(',')] = '.';
+    }
 
     CMarkup xml;
 
@@ -177,6 +180,7 @@ void Budget::addIncomeToFile(int date)
     xml.AddElem( "incomeId", incomeId );
     xml.AddElem( "userId", userId );
     xml.AddElem( "date", date );
+    xml.AddElem( "item", item);
     xml.AddElem( "amount", amount);
     xml.Save("incomes.xml");
 
@@ -289,4 +293,10 @@ int Budget::getTheNumberOfDaysOfTheMonth(int year, int month)
             }
         }
     }
+}
+
+double Budget::convertStringToDouble(string number)
+{
+    double floatNumber = atof(number.c_str());
+    return floatNumber;
 }
