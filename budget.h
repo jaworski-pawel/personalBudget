@@ -36,6 +36,7 @@ private:
     int getCurrentTime();
     int assignOperationId(string fileName);
     void addIncomeToFile(int date);
+    void addExpenseToFile(int date);
     int convertStringToInt(string number);
     bool checkData(string date);
     int convertDateToInt(string date);

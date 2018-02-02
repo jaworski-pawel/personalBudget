@@ -75,36 +75,36 @@ void Budget::addIncome()
 
 void Budget::addExpense()
 {
-    int expenseId, userId, date;
-    string item;
-    float amount;
+    char selection;
 
     system("cls");
-    cout << "Adding an expense" << endl;
-    cout << "Enter expense ID";
-    cin >> expenseId;
-    cout << "Enter the date: ";
-    cin >> date;
-    cout << "Enter the item: ";
-    cin >> item;
-    cout << "Enter the amount";
-    cin >> amount;
+    cout << "Adding a expense" << endl << endl;
+    cout << "1. Current date" << endl;
+    cout << "2. Another date" << endl << endl;
+    cin >> selection;
 
-    CMarkup xml;
-
-    createAFileIfItdoesNotExist("expenses.xml");
-    xml.Load("expenses.xml");
-    if(!xml.FindElem("expenses"))
+    switch (selection)
     {
-        xml.SetDoc( "<?xml version=\"1.0\" encoding=\"UTF\"?>\r\n" );
-        xml.AddElem( "expenses" );
+    case '1':
+    {
+        addExpenseToFile(getCurrentTime());
+        break;
     }
-    xml.IntoElem();
-    xml.AddElem( "expenseId", expenseId);
-    xml.AddElem( "userId", idOfTheLoggedUser );
-    xml.AddElem( "date", date );
-    xml.AddElem( "amount", amount);
-    xml.Save("expenses.xml");
+    case '2':
+    {
+        string anotherDate;
+        bool repeat = true;
+
+        while (repeat)
+        {
+            cout << "Enter the date(yyyy-mm-dd): ";
+            cin >> anotherDate;
+            repeat = !checkData(anotherDate);
+        }
+        addExpenseToFile(convertDateToInt(anotherDate));
+        break;
+    }
+    }
 }
 
 void Budget::createAFileIfItdoesNotExist(string fileName)
@@ -185,6 +185,47 @@ void Budget::addIncomeToFile(int date)
     xml.Save("incomes.xml");
 
     cout << "Income added" << endl;
+    Sleep(1000);
+}
+
+void Budget::addExpenseToFile(int date)
+{
+    int expenseId, userId;
+    string item, amount;
+
+    expenseId = assignOperationId("expenses.xml");
+    userId = idOfTheLoggedUser;
+    system("cls");
+    cout << "Adding a expense" << endl << endl;
+    cout << "Enter the item: ";
+    cin >> item;
+    cout << "Enter the amount: ";
+    cin >> amount;
+    if (amount.find_first_of(',') != string::npos)
+    {
+        amount[amount.find_first_of(',')] = '.';
+    }
+
+    CMarkup xml;
+
+    createAFileIfItdoesNotExist("expenses.xml");
+    xml.Load("expenses.xml");
+    if(!xml.FindElem("expenses"))
+    {
+        xml.SetDoc( "<?xml version=\"1.0\" encoding=\"UTF\"?>\r\n" );
+        xml.AddElem( "expenses" );
+    }
+    xml.IntoElem();
+    xml.AddElem( "expense" );
+    xml.IntoElem();
+    xml.AddElem( "expenseId", expenseId );
+    xml.AddElem( "userId", userId );
+    xml.AddElem( "date", date );
+    xml.AddElem( "item", item);
+    xml.AddElem( "amount", amount);
+    xml.Save("expenses.xml");
+
+    cout << "Expense added" << endl;
     Sleep(1000);
 }
 
