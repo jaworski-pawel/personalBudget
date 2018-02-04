@@ -107,6 +107,85 @@ void Budget::addExpense()
     }
 }
 
+void Budget::showBalanceFromTheCurrentMonth()
+{
+    int startingDate, endDate;
+    time_t currentTime;
+    time(&currentTime);
+    struct tm * today;
+    today = localtime(& currentTime);
+    int currentYear = today -> tm_year + 1900;
+    int currentMonth = today -> tm_mon + 1;
+
+    today -> tm_mday = 1;
+    startingDate = mktime(today);
+
+    today -> tm_mday = getTheNumberOfDaysOfTheMonth(currentYear, currentMonth);
+    endDate = mktime(today);
+
+    cout << "Balance from the current month" << endl << endl;
+
+    showBalance(startingDate, endDate);
+}
+
+void Budget::showBalance(int startingDate, int endDate)
+{
+    double sumOfIncomes, sumOfExpenses, balance;
+    vector<Operation> incomes;
+    vector<Operation> expenses;
+    loadDataFromFile(incomes, startingDate, endDate, "income");
+    sortingOperationsByDate(incomes);
+    cout << "Incomes:" << endl;
+    sumOfIncomes = showOperations(incomes);
+    loadDataFromFile(expenses, startingDate, endDate, "expense");
+    sortingOperationsByDate(expenses);
+    cout << "Expenses:" << endl;
+    sumOfExpenses = showOperations(expenses);
+    cout << endl << "Sum of incomes: " << sumOfIncomes << endl;
+    cout << "Sum of expenses: " << sumOfExpenses << endl << endl;
+    cout << "Balance: " << sumOfIncomes - sumOfExpenses << endl << endl;
+    system("pause");
+}
+
+void Budget::loadDataFromFile(vector<Operation> &operations, int startingDate, int endDate, string typeOfOperation)
+{
+    string fileName = typeOfOperation + "s.xml";
+    string nameOfOperationId = typeOfOperation + "Id";
+
+    operations.erase(operations.begin(), operations.end());
+
+    CMarkup xml;
+
+    createAFileIfItdoesNotExist(fileName);
+    xml.Load(fileName);
+
+    string operationId, userId, date, item, amount;
+
+    xml.FindElem();
+    xml.IntoElem();
+
+    while (xml.FindElem(typeOfOperation))
+    {
+        xml.IntoElem();
+        xml.FindElem(nameOfOperationId);
+        operationId = xml.GetData();
+        xml.FindElem("userId");
+        userId = xml.GetData();
+        xml.FindElem("date");
+        date = xml.GetData();
+        xml.FindElem("item");
+        item = xml.GetData();
+        xml.FindElem("amount");
+        amount = xml.GetData();
+        xml.OutOfElem();
+        Operation temporaryOperation(convertStringToInt(operationId), convertStringToInt(userId), convertStringToInt(date), item, convertStringToDouble(amount));
+        if(temporaryOperation.getUserId() == idOfTheLoggedUser && temporaryOperation.getDate() > startingDate && temporaryOperation.getDate() < endDate)
+        {
+            operations.push_back(temporaryOperation);
+        }
+    }
+}
+
 void Budget::createAFileIfItdoesNotExist(string fileName)
 {
     fstream file;
@@ -340,4 +419,42 @@ double Budget::convertStringToDouble(string number)
 {
     double floatNumber = atof(number.c_str());
     return floatNumber;
+}
+
+void Budget::sortingOperationsByDate(vector<Operation> &operations)
+{
+    int numberOfOperations = operations.size();
+    for (int i = 1; i < numberOfOperations; i++)
+    {
+        for (int j = numberOfOperations - 1; j >= 1; j--)
+        {
+            if (operations[j].getDate() < operations[j-1].getDate())
+            {
+                swap(operations[j], operations[j-1]);
+            }
+        }
+    }
+}
+
+double Budget::showOperations(vector<Operation> &operations)
+{
+    int numberOfOperations = operations.size();
+    double sumOfOperations = 0;
+
+    for (int i = 0; i < numberOfOperations; ++i)
+    {
+        cout << "Operation ID: " << operations[i].getOperationId() << " Date: " << showDate(operations[i].getDate()) << " Item: " << operations[i].getItem() << " Amount: " << operations[i].getAmount() << endl;
+        sumOfOperations += operations[i].getAmount();
+    }
+    return sumOfOperations;
+}
+
+string Budget::showDate(int time)
+{
+    char bufor[11];
+    time_t timeToConversion = time;
+    struct tm * dateToShow;
+    dateToShow = localtime(&timeToConversion);
+    strftime(bufor, 11, "%Y-%m-%d", dateToShow);
+    return bufor;
 }

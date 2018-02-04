@@ -7,20 +7,24 @@ using namespace std;
 
 class Operation
 {
+    int operationId;
     int userId;
     int date;
     string item;
-    float amount;
+    double amount;
 
 public:
+    Operation(int operationId, int userId, int date, string item, double amount);
+    int getOperationId();
+    void setOperationId(int operationId);
     int getUserId();
     void setUserId(int userId);
     int getDate();
     void setDate(int date);
     string getItem();
     void setItem(string item);
-    float getAmount();
-    void setAmount(float amount);
+    double getAmount();
+    void setAmount(double amount);
 };
 
 #endif

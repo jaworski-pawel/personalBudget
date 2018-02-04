@@ -6,8 +6,7 @@
 #include <fstream>
 #include <time.h>
 #include <stdlib.h>
-#include "income.h"
-#include "expense.h"
+#include "operation.h"
 #include "Markup.h"
 
 using namespace std;
@@ -28,10 +27,11 @@ public:
     void setNumberOfExpenses(int numberOfExpenses);
     void addIncome();
     void addExpense();
-    void showBalance(vector<Income> &incomes, vector<Expense> &expenses);
+    void showBalanceFromTheCurrentMonth();
 
 private:
-    void loadDataFromFile(vector<Income> &incomes, vector<Expense> &expenses, int idOfTheLoggedUser);
+    void showBalance(int startingDate, int endDate);
+    void loadDataFromFile(vector<Operation> &operations, int startingDate, int endDate, string typeOfOperation);
     void createAFileIfItdoesNotExist(string fileName);
     int getCurrentTime();
     int assignOperationId(string fileName);
@@ -42,6 +42,9 @@ private:
     int convertDateToInt(string date);
     int getTheNumberOfDaysOfTheMonth(int year, int month);
     double convertStringToDouble(string number);
+    void sortingOperationsByDate(vector<Operation> &operations);
+    double showOperations(vector<Operation> &operations);
+    string showDate(int time);
 };
 
 #endif

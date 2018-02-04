@@ -3,6 +3,25 @@
 
 using namespace std;
 
+Operation::Operation(int operationId, int userId, int date, string item, double amount)
+{
+    this -> operationId = operationId;
+    this -> userId = userId;
+    this -> date = date;
+    this -> item = item;
+    this -> amount = amount;
+}
+
+int Operation::getOperationId()
+{
+    return operationId;
+}
+
+void Operation::setOperationId(int operationId)
+{
+    this -> operationId = operationId;
+}
+
 int Operation::getUserId()
 {
     return userId;
@@ -33,12 +52,12 @@ void Operation::setItem(string item)
     this -> item = item;
 }
 
-float Operation::getAmount()
+double Operation::getAmount()
 {
     return amount;
 }
 
-void Operation::setAmount(float amount)
+void Operation::setAmount(double amount)
 {
     this -> amount = amount;
 }
