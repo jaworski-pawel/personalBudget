@@ -156,6 +156,41 @@ void Budget::showBalanceFromThePreviousMonth()
     showBalance(startingDate, endDate);
 }
 
+void Budget::showBalanceFromTheSelectedPeriod()
+{
+    string sinceWhen, untilWhen;
+    int startingDate, endDate;
+    bool repeat = true;
+
+    while (repeat)
+    {
+        cout << "Enter from when to show the balance (yyyy-mm-dd): ";
+        cin >> sinceWhen;
+        repeat = !checkData(sinceWhen);
+    };
+    startingDate = convertDateToInt(sinceWhen);
+
+    repeat = true;
+    while (repeat)
+    {
+        cout << "Enter until when to show balance (yyyy-mm-dd): ";
+        cin >> untilWhen;
+        repeat = !checkData(untilWhen);
+    };
+    endDate = convertDateToInt(untilWhen);
+    if (startingDate > endDate)
+    {
+        cout << "The start date can not be later than the end date" << endl;
+        Sleep(5000);
+    }
+    else
+    {
+        cout << "Balance from the selected period" << endl << endl;
+
+        showBalance(startingDate, endDate);
+    }
+}
+
 void Budget::showBalance(int startingDate, int endDate)
 {
     double sumOfIncomes, sumOfExpenses, balance;

@@ -30,6 +30,7 @@ public:
     void addExpense();
     void showBalanceFromTheCurrentMonth();
     void showBalanceFromThePreviousMonth();
+    void showBalanceFromTheSelectedPeriod();
 
 private:
     void showBalance(int startingDate, int endDate);

@@ -84,7 +84,7 @@ int main()
                 }
             case '5':
                 {
-                    cout << "Option 5" << endl;
+                    budget.showBalanceFromTheSelectedPeriod();
                     break;
                 }
             case '6':
