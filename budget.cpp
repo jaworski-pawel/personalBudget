@@ -128,6 +128,34 @@ void Budget::showBalanceFromTheCurrentMonth()
     showBalance(startingDate, endDate);
 }
 
+void Budget::showBalanceFromThePreviousMonth()
+{
+    int startingDate, endDate;
+    time_t currentTime;
+    time(&currentTime);
+    struct tm * today;
+    today = localtime(& currentTime);
+    today -> tm_mon--;
+    int previousMonth = today -> tm_mon + 1;
+    if (previousMonth == 0)
+    {
+        previousMonth = 12;
+        today -> tm_mon = 11;
+        today -> tm_year--;
+    }
+    int currentYear = today -> tm_year + 1900;
+
+    today -> tm_mday = 1;
+    startingDate = mktime(today);
+
+    today -> tm_mday = getTheNumberOfDaysOfTheMonth(currentYear, previousMonth);
+    endDate = mktime(today);
+
+    cout << "Balance from the previous month" << endl << endl;
+
+    showBalance(startingDate, endDate);
+}
+
 void Budget::showBalance(int startingDate, int endDate)
 {
     double sumOfIncomes, sumOfExpenses, balance;

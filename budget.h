@@ -28,6 +28,7 @@ public:
     void addIncome();
     void addExpense();
     void showBalanceFromTheCurrentMonth();
+    void showBalanceFromThePreviousMonth();
 
 private:
     void showBalance(int startingDate, int endDate);

@@ -79,7 +79,7 @@ int main()
                 }
             case '4':
                 {
-                    cout << "Option 4" << endl;
+                    budget.showBalanceFromThePreviousMonth();
                     break;
                 }
             case '5':
