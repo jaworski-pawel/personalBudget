@@ -471,7 +471,7 @@ double Budget::showOperations(vector<Operation> &operations)
 
     for (int i = 0; i < numberOfOperations; ++i)
     {
-        cout << "Operation ID: " << operations[i].getOperationId() << " Date: " << showDate(operations[i].getDate()) << " Item: " << operations[i].getItem() << " Amount: " << operations[i].getAmount() << endl;
+        cout << "Operation ID: " << operations[i].getOperationId() << " Date: " << showDate(operations[i].getDate()) << " Item: " << operations[i].getItem() << " Amount: " << fixed << setprecision(2) << operations[i].getAmount() << endl;
         sumOfOperations += operations[i].getAmount();
     }
     return sumOfOperations;

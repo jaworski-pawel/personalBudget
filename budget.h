@@ -2,6 +2,7 @@
 #define BUDGET_H
 
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <fstream>
 #include <time.h>
